@@ -1,0 +1,26 @@
+#!/bin/bash
+
+
+PORT="8080"
+
+if [! -e "bin" ]; then
+    mkdir bin
+fi
+
+elm-make "frontend/Main.elm" --output=bin/app.js --yes
+cp bin/app.js backend/static/app.js
+cp frontend/index.html backend/static/index.html
+
+docker build --tag pptq ../backend
+
+old_images=$(docker images -q -f "dangling=true")
+if [ ! -z "$old_images" ]; then
+    docker rmi $old_images 2> /dev/null || true
+fi
+
+docker run \
+    -p ${PORT}:8080 \
+    --name=pptq.dev
+    --rm
+    pptq
+
