@@ -7,7 +7,7 @@ if [! -e "bin" ]; then
     mkdir bin
 fi
 
-elm-make "frontend/Main.elm" --output=bin/app.js --yes
+elm-make "frontend/src/Main.elm" --output=bin/app.js --yes
 cp bin/app.js backend/static/app.js
 cp frontend/index.html backend/static/index.html
 
